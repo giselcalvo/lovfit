@@ -86,7 +86,7 @@ window.fbAsyncInit = function() {
       //   'Welcome: ' + response.name + '!';
       console.log(typeof(response.id))
       content.FB_id = response.id
-      content.FB_first_name = response.first_name
+      content.first_name = response.first_name
       $('#greeting').append(response.first_name);
       $('#greeting').append("!");
       window.location="https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
@@ -134,7 +134,7 @@ window.fbAsyncInit = function() {
 
 	<div id="content">
 
-		<h2 id="greeting">Welcome </h2>
+		<h2 id="greeting">Welcome {{request.session.name}}</h2>
 
 		<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false" button scope="public_profile,email,user_friends" ></div>
 
