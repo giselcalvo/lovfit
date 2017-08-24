@@ -2,6 +2,9 @@
 <html>
 <head>
 	<title>LovFit</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main/css/styles.css' %}" media="screen" title="no title" charset="utf-8">
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src= 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 
@@ -86,7 +89,7 @@ window.fbAsyncInit = function() {
       content.FB_first_name = response.first_name
       $('#greeting').append(response.first_name);
       $('#greeting').append("!");
-
+      window.location="https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
       console.log(response)
 
   });
@@ -133,9 +136,8 @@ window.fbAsyncInit = function() {
 
 		<h2 id="greeting">Welcome </h2>
 
-		<div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="continue_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false" button scope="public_profile,email,user_friends" ></div>
+		<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false" button scope="public_profile,email,user_friends" ></div>
 
-    <button type="button" onclick="location.href='/strava_login/'">strava</button>
 
 	</div>
 
