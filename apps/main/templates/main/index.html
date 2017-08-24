@@ -77,13 +77,16 @@
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
   function testAPI() {
+  	var content = {}
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me?fields=first_name,name', function(response) {
       console.log('Successful login for: ' + response.name);
 
       // document.getElementById('status').innerHTML =
       //   'Welcome: ' + response.name + '!';
-
+      	console.log(typeof(response.id))
+      	content.FB_id = response.id
+      	content.FB_first_name = response.first_name
         $('#greeting').append(response.first_name);
         $('#greeting').append("!");
 
@@ -96,12 +99,33 @@
     //get FB friends
       FB.api('/me/friends', function(response) {
       console.log('Successful login for: ' + response.name);
-
+      	content.friends = []
         for (var i=0; i< response.data.length; i++){
         	$('#friends').append(response.data[i].name);
         	$('#friends').append("<br>");
 
+        	content.friends.push({'name': response.data[i].name, 'FB_id': response.data[i].id})
+
         }
+
+        // content['friends'] = friends
+        console.log('content', content)
+
+  //       $.post('/create_user/', content, function(response) {
+  //   		// alert(response);
+  //   		console.log(response)
+		// });
+
+
+         $.ajax({
+                 type:"POST",
+                 url:"/create_user/",
+                 data: {'content': JSON.stringify(content)},
+                 success: function(){
+                     $('#message').html("<h2>Success!</h2>") 
+                    }
+            });
+
 
         console.log(response)
      

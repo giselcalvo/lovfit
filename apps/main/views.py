@@ -2,17 +2,32 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from time import gmtime, strftime
 from django.utils.crypto import get_random_string
-import bcrypt
+from django.views.decorators.csrf import csrf_exempt
+import bcrypt, json
 
 def index(request):
 
 	return render(request, "main/index.html")
 
-# #if user not in database
-# def create_user(request):
+#if user not in database
+@csrf_exempt
+def create_user(request):
+	print "I am in create user"
+	data = json.loads(request.POST['content'])
+	print data['FB_id']
+	print data['friends'][0]['name']
 
-# 	#check if user is database
-# 	user = User.objects.get(FB_id=request.session['FB_id'])
+	# for key, item in request.POST.iteritems() :
+	# 	if key == 'FB_id' :
+	# 		print 'yay'
+	# 	print key, item
 
-# 	#if not create user
-# 	user = User.objects.create(FB_id=request.session['FB_id'])
+	#print request.POST['FB_id']
+	# print request
+	# #check if user is database
+	# user = User.objects.get(FB_id=request.session['FB_id'])
+
+	# #if not create user
+	# user = User.objects.create(FB_id=request.session['FB_id'])
+
+	return render(request, "main/index.html")
