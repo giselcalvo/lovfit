@@ -1,7 +1,7 @@
 body{ 
     background-image: url('../img/background1.jpg');
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-size: 100%;
 }
 
 #content{
@@ -12,19 +12,15 @@ body{
 	padding:30px;
 	margin:auto;
 	border-radius:50%;
-	width:300px;
-	height:300px;
+	width:400px;
+	height:400px;
 	margin-top: 10%;
 
 }
 
-
-
 #content:hover{
 	opacity:0.8;
 }
-
-
 
 *{
 	font-family: sans-serif;
@@ -35,11 +31,8 @@ body{
 
 .fb-login-button{
 	text-align: center;
-	margin:auto;
-}
-
-h1{
-	font-size: 30px;
+	margin: 0 auto;
+	padding-left: 50px;
 }
 
 img{
