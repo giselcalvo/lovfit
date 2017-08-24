@@ -11,7 +11,7 @@ class UserManager(models.Manager):
 		#check if user exist in the database
 		if len(User.objects.filter(FB_id=postData['FB_id'])) == 0:
 			print "creating new user: ", postData['FB_id']
-			user = User.objects.create(FB_id=postData['FB_id'])
+			user = User.objects.create(FB_id=postData['FB_id'], first_name=postData['first_name'])
 		else:
 			error['user'] = "User is already in the database"
 		if error:
@@ -36,7 +36,7 @@ class UserManager(models.Manager):
 
 
 class User(models.Model):
-	#first_name = models.CharField(max_length=255)
+	first_name = models.CharField(max_length=255, null=True)
 	FB_id = models.IntegerField()
 	STRA_id = models.CharField(max_length=255, null=True)
 	STRA_accessToken = models.TextField(null=True)
