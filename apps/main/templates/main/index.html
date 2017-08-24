@@ -27,12 +27,12 @@
       testAPI();
   } else {
       // The person is not logged into your app or we are unable to tell.
-      document.getElementById('status').innerHTML = 'Please log ' +
-      'into this app.';
+      document.getElementById('status').innerHTML = 'Please log into this app.';
   }
 }
 
 function checkLoginState() {
+  console.log("checkLoginState");
 	FB.getLoginStatus(function(response) {
 		statusChangeCallback(response);
 	});
@@ -61,6 +61,7 @@ window.fbAsyncInit = function() {
 
   FB.getLoginStatus(function(response) {
   	statusChangeCallback(response);
+    console.log(response);
   });
 
 };
@@ -87,9 +88,8 @@ window.fbAsyncInit = function() {
       console.log(typeof(response.id))
       content.FB_id = response.id
       content.first_name = response.first_name
-      $('#greeting').append(response.first_name);
-      $('#greeting').append("!");
-      window.location="https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
+      window.location="/strava_login/"
+      // window.location="https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
       console.log(response)
 
   });
@@ -113,7 +113,8 @@ window.fbAsyncInit = function() {
     		url:"/create_user/",
     		data: {'content': JSON.stringify(content)},
     		success: function(){
-    			$('#message').html("<h2>Success!</h2>") 
+          console.log("got here")
+    			$('#message').html("<h2>Success!</h2>")
     		}
     	});
 
@@ -134,9 +135,9 @@ window.fbAsyncInit = function() {
 
 	<div id="content">
 
-		<h2 id="greeting">Welcome {{request.session.name}}</h2>
+		<h2 id="greeting">Welcome</h2>
 
-		<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false" button scope="public_profile,email,user_friends" ></div>
+		<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false" button scope="public_profile,email,user_friends" onlogin="checkLoginState()" ></div>
 
 
 	</div>

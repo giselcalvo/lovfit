@@ -15,23 +15,30 @@ def index(request):
 def create_user(request):
 	print "I am in create user"
 	data = json.loads(request.POST['content'])
-	request.session['FB_id'] = data['FB_id']
+	# request.session['FB_id'] = data['FB_id']
 	result = User.objects.user_validator(data)
+	print result
 
-	if type(result) == dict:
-		errors = result
-		print errors
-		return redirect('/')
-	else:
-		request.session['id'] = result.id
-		request.session['first_name'] = result.first_name
-		print "added user with no errors, user ID: ",request.session['id'], user	
+	# if type(result) == dict:
+	# 	errors = result
+	# 	print errors
+	# 	return redirect('/')
+	# else:
+	request.session['id'] = result.id
+	request.session['first_name'] = result.first_name
+	print "added user with no errors, user ID: ", request.session['id']	
 
-	return redirect ('/')
+	return redirect('/')
 
 def strava_login(request) :
 	if not 'id' in request.session :
 		return redirect('/')
+	try :
+		user = User.objects.get(id = request.session['id'])
+		if user.STRA_accessToken :
+			return redirect('/dashboard/')
+	except :
+		pass
 	url = "https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
 	return redirect(url)
 
@@ -54,8 +61,9 @@ def strava_get_id(request) :
 	print type(result)
 	print result
 	if result :
-		return HttpResponse('Success!')
-	return HttpResponse('Loser!')
+		print "it has"
+		return redirect('/dashboard/')
+	return redirect('/')
 
 def encodeToken(access_token, n) :
 	for i in range(n + 1) :
@@ -68,6 +76,9 @@ def decodeToken(hashed_token) :
 	for i in range(int(n) + 1) :
 		hashed_token = base64.b64decode(hashed_token)
 	return hashed_token
+
+def dashboard(request) :
+	return render(request, 'main/dashboard.html')
 
 # def getActivities(request) :
 # 	url = "https://www.strava.com/api/v3/athlete/activities"
