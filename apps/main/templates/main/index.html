@@ -61,7 +61,6 @@ window.fbAsyncInit = function() {
 
   FB.getLoginStatus(function(response) {
   	statusChangeCallback(response);
-    console.log(response);
   });
 
 };
@@ -81,48 +80,38 @@ window.fbAsyncInit = function() {
   	var content = {}
   	console.log('Welcome!  Fetching your information.... ');
   	FB.api('/me?fields=first_name,name', function(response) {
-  		console.log('Successful login for: ' + response.name);
-
       // document.getElementById('status').innerHTML =
       //   'Welcome: ' + response.name + '!';
-      console.log(typeof(response.id))
-      content.FB_id = response.id
-      content.first_name = response.first_name
-      window.location="/strava_login/"
+      console.log('fb to strava');
+      //basic user info from fb
+      content.FB_id = response.id;
+      content.first_name = response.first_name;
       // window.location="https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
-      console.log(response)
-
-  });
+    // });
 
     //get FB friends
-    FB.api('/me/friends', function(response) {
-    	console.log('Successful login for: ' + response.name);
-    	content.friends = []
-    	for (var i=0; i< response.data.length; i++){
-    		$('#friends').append(response.data[i].name);
-    		$('#friends').append("<br>");
+    // FB.api('/me/friends', function(response) {
+    //   //user friends
+    // 	content.friends = []
+    // 	for (var i=0; i< response.data.length; i++){
+    // 		content.friends.push({'name': response.data[i].name, 'FB_id': response.data[i].id})
+    // 	}
+    // }
 
-    		content.friends.push({'name': response.data[i].name, 'FB_id': response.data[i].id})
+      console.log(content)
 
-    	}
-
-    	console.log('content', content)
-
-    	$.ajax({
+    	$.ajax({ //send all info to backend
     		type:"POST",
     		url:"/create_user/",
+        // data: {'content': content},
     		data: {'content': JSON.stringify(content)},
     		success: function(){
-          console.log("got here")
-    			$('#message').html("<h2>Success!</h2>")
-    		}
+    			$('#message').html("<h2>Success!</h2>");
+	        window.location="/strava_login/";
+        }
     	});
-
-    	console.log(response)
-
     });
-
-}
+  }
 
 
 </script>

@@ -1,36 +1,28 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from time import gmtime, strftime
-from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
-import bcrypt, json, base64
+import json, base64
 from models import User
 import requests
 
 def index(request):
-
+	print 'index'
+	if 'id' in request.session :
+		return redirect('/dashboard/')
 	return render(request, "main/index.html")
 
 @csrf_exempt
 def create_user(request):
-	print "I am in create user"
+	print 'create user'
 	data = json.loads(request.POST['content'])
-	# request.session['FB_id'] = data['FB_id']
 	result = User.objects.user_validator(data)
-	print result
-
-	# if type(result) == dict:
-	# 	errors = result
-	# 	print errors
-	# 	return redirect('/')
-	# else:
 	request.session['id'] = result.id
 	request.session['first_name'] = result.first_name
-	print "added user with no errors, user ID: ", request.session['id']	
-
-	return redirect('/')
+	return redirect('/strava_login/')
 
 def strava_login(request) :
+	print "strava_login"
 	if not 'id' in request.session :
 		return redirect('/')
 	try :
@@ -43,6 +35,7 @@ def strava_login(request) :
 	return redirect(url)
 
 def strava_get_id(request) :
+	print 'strava_get_id'
 	if not 'id' in request.session :
 		return redirect('/')
 	url = "https://www.strava.com/oauth/token?client_id=19767&client_secret=920f2aa88fa3b85edf15ff64142d8d09dbc26027&code="
@@ -58,10 +51,7 @@ def strava_get_id(request) :
 		'user_id': request.session['id']
 	}
 	result = User.objects.add_Strava(content)
-	print type(result)
-	print result
 	if result :
-		print "it has"
 		return redirect('/dashboard/')
 	return redirect('/')
 
@@ -78,7 +68,18 @@ def decodeToken(hashed_token) :
 	return hashed_token
 
 def dashboard(request) :
+	print 'dashboard'
+	if not 'id' in request.session :
+		return redirect('/')
+	user = User.objects.getUser(request.session['id'])
+	if not user :
+		return ('/logout/')
 	return render(request, 'main/dashboard.html')
+
+def logout(request) :
+	print 'logout'
+	request.session.clear()
+	return redirect('/')
 
 # def getActivities(request) :
 # 	url = "https://www.strava.com/api/v3/athlete/activities"

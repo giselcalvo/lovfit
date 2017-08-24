@@ -6,21 +6,12 @@ from django.db import models
 class UserManager(models.Manager):
 	
 	def user_validator(self, postData):
-		# error = {}
 		print postData
-		#check if user exist in the database
 		try :
 			user = User.objects.get(FB_id = postData['FB_id'])
 			return user
 		except :
 			user = User.objects.create(FB_id=postData['FB_id'], first_name=postData['first_name'])
-		# if len(User.objects.filter(FB_id=postData['FB_id'])) == 0:
-		# 	print "creating new user: ", postData['FB_id']
-		# 	user = User.objects.create(FB_id=postData['FB_id'], first_name=postData['first_name'])
-		# else:
-		# 	error['user'] = "User is already in the database"
-		# if error:
-		# 	return error	
 		return user
 
 	def add_Strava(request, data) :
@@ -28,18 +19,22 @@ class UserManager(models.Manager):
 			return False
 		if 'id' not in data['athlete'] or 'profile_medium' not in data['athlete'] :
 			return False
-		print data['user_id']
 		try :
 			user = User.objects.get(id = data['user_id'])
 		except :
-			print "works haha"
 			return False
 		user.STRA_id = data['athlete']['id']
 		user.STRA_pic = data['athlete']['profile_medium']
 		user.STRA_accessToken = data['access']
 		user.save()
 		return True
-	
+
+	def getUser(request, uid):
+		try :
+			user = User.objects.get(id = uid)
+			return user
+		except :
+			return False
 
 
 class User(models.Model):
