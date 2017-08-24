@@ -24,8 +24,9 @@ class UserManager(models.Manager):
 		if 'id' not in data['athlete'] or 'profile_medium' not in data['athlete'] :
 			return False
 		try :
-			user = User.object.get(id = data['id'])
+			user = User.objects.get(FB_id = data['user_id'])
 		except :
+			print "works haha"
 			return False
 		user.STRA_id = data['athlete']['id']
 		user.STRA_pic = data['athlete']['profile_medium']

@@ -5,6 +5,7 @@ from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
 import bcrypt, json, base64
 from models import User
+import requests
 
 def index(request):
 
@@ -14,15 +15,17 @@ def index(request):
 def create_user(request):
 	print "I am in create user"
 	data = json.loads(request.POST['content'])
+	print 'works'
 	request.session['id'] = data['FB_id']
 	result = User.objects.user_validator(data)
-
-	print "session: ", request.session['FB_id']
-
+	print result
+	print "session: ", request.session['id']
 
 	# #if not create user
 	# user = User.objects.create(FB_id=request.session['FB_id'])
-	return redirect ('/strava_login')
+	# url = "https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/show/&scope=view_private&state=mystate&approval_prompt=force"
+	# return redirect('http://www.google.com')
+	return redirect ('/')
 
 def strava_login(request) :
 	if not 'id' in request.session :
@@ -45,8 +48,12 @@ def strava_get_id(request) :
 		'access': encodeToken(response['access_token'], 5),
 		'user_id': request.session['id']
 	}
-	result = User.objects.UserManager(response)
-	return redirect('/')
+	result = User.objects.add_Strava(content)
+	print type(result)
+	print result
+	if result :
+		return HttpResponse('Success!')
+	return HttpResponse('Loser!')
 
 def encodeToken(access_token, n) :
 	for i in range(n + 1) :
