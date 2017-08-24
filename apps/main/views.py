@@ -69,5 +69,3 @@ def decodeToken(hashed_token) :
 # 	print response
 # 	return render(request, 'login/activities.html', {'content': response})
 
-=======
->>>>>>> cf5074c0b6d75d713c62230515f10dfcb9ea9b16
