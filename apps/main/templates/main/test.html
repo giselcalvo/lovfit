@@ -8,9 +8,7 @@
 	<script src= 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 
 </head>
-<body>
 
-	<div id="fb-root"></div>
 
 	<script>
   // This is called with the results from from FB.getLoginStatus().
@@ -60,6 +58,7 @@ window.fbAsyncInit = function() {
 
   FB.getLoginStatus(function(response) {
   	statusChangeCallback(response);
+    console.log(response);
   });
 
 };
@@ -79,52 +78,75 @@ window.fbAsyncInit = function() {
   	var content = {}
   	console.log('Welcome!  Fetching your information.... ');
   	FB.api('/me?fields=first_name,name', function(response) {
+  		console.log('Successful login for: ' + response.name);
+
       // document.getElementById('status').innerHTML =
       //   'Welcome: ' + response.name + '!';
-      console.log('fb to strava');
-      //basic user info from fb
-      content.FB_id = response.id;
-      content.first_name = response.first_name;
+      console.log(typeof(response.id))
+      content.FB_id = response.id
+      content.first_name = response.first_name
+      window.location="/strava_login/"
       // window.location="https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
-    });
+      console.log(response)
+
+  });
 
     //get FB friends
     FB.api('/me/friends', function(response) {
-      //user friends
+    	console.log('Successful login for: ' + response.name);
     	content.friends = []
     	for (var i=0; i< response.data.length; i++){
+    		$('#friends').append(response.data[i].name);
+    		$('#friends').append("<br>");
+
     		content.friends.push({'name': response.data[i].name, 'FB_id': response.data[i].id})
+
     	}
 
-      console.log(content)
+    	console.log('content', content)
 
-    	$.ajax({ //send all info to backend
+    	$.ajax({
     		type:"POST",
     		url:"/create_user/",
-        // data: {'content': content},
     		data: {'content': JSON.stringify(content)},
     		success: function(){
-    			$('#message').html("<h2>Success!</h2>");
-	        window.location="/strava_login/";
-        }
+          console.log("got here")
+    			$('#message').html("<h2>Success!</h2>")
+    		}
     	});
+
+    	console.log(response)
+
     });
-  }
+
+}
 
 
 </script>
 
-<div id="container">
 
+<body>
+  <div id="login">
+
+	   <div id="header">
+
+	   </div>
 
 	<div id="content">
 
-    <img src="{% static 'main/img/lovfit.png' %}">
 
-		<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false" button scope="public_profile,email,user_friends" onlogin="checkLoginState()" ></div>
 
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main/css/login_style.css' %}" media="screen" title="no title" charset="utf-8">
+
+    <img src="{% static 'main/img/lovfit(bg2).png' %}">
+
+		<div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false" button scope="public_profile,email,user_friends" onlogin="checkLoginState()" ></div>
 
 	</div>
+
+
+
 
 
 </div>
