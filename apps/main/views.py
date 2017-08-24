@@ -14,12 +14,14 @@ def index(request):
 
 @csrf_exempt
 def create_user(request):
+	# return strava_login()
 	print 'create user'
 	data = json.loads(request.POST['content'])
 	result = User.objects.user_validator(data)
 	request.session['id'] = result.id
 	request.session['first_name'] = result.first_name
-	return redirect('/strava_login/')
+	return HttpResponse("success")
+	# return redirect('/strava_login/')
 
 def strava_login(request) :
 	print "strava_login"
@@ -31,7 +33,7 @@ def strava_login(request) :
 			return redirect('/dashboard/')
 	except :
 		pass
-	url = "https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
+	url = "https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id&scope=view_private&state=mystate&approval_prompt=force"
 	return redirect(url)
 
 def strava_get_id(request) :

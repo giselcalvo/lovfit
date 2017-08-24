@@ -87,16 +87,15 @@ window.fbAsyncInit = function() {
       content.FB_id = response.id;
       content.first_name = response.first_name;
       // window.location="https://www.strava.com/oauth/authorize?client_id=19767&response_type=code&redirect_uri=http://localhost:8000/strava/get_stra_id/&scope=view_private&state=mystate&approval_prompt=force"
-    // });
+    });
 
     //get FB friends
-    // FB.api('/me/friends', function(response) {
-    //   //user friends
-    // 	content.friends = []
-    // 	for (var i=0; i< response.data.length; i++){
-    // 		content.friends.push({'name': response.data[i].name, 'FB_id': response.data[i].id})
-    // 	}
-    // }
+    FB.api('/me/friends', function(response) {
+      //user friends
+    	content.friends = []
+    	for (var i=0; i< response.data.length; i++){
+    		content.friends.push({'name': response.data[i].name, 'FB_id': response.data[i].id})
+    	}
 
       console.log(content)
 
