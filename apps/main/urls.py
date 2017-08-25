@@ -8,5 +8,6 @@ urlpatterns = [
 	url(r'^strava_login/$', views.strava_login),
 	url(r'^strava/get_stra_id/$', views.strava_get_id),
 	url(r'^dashboard/$', views.dashboard),
-	url(r'^logout/$', views.logout)
+	url(r'^logout/$', views.logout),
+	url(r'^show_profile/(?P<user_id>\d+)$', views.show_profile),
 ]

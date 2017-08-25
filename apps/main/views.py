@@ -78,10 +78,35 @@ def dashboard(request) :
 		return ('/logout/')
 	return render(request, 'main/dashboard.html')
 
-def logout(request) :
+def logout(request):
 	print 'logout'
 	request.session.clear()
 	return redirect('/')
+
+def show_profile(request, user_id):
+	print "show_profile"
+	content = {}
+	user = User.objects.get(id=user_id)
+
+	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
+	url = "https://www.strava.com/api/v3/athletes/"
+	url += user.STRA_id
+	athlete = requests.get(url, headers=headers).json()
+
+	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
+	url = "https://www.strava.com/api/v3/athlete/activities/"
+	data = {'per_page': 10}
+	activities = requests.get(url, headers=headers, params=data).json()
+
+	content = {
+		'athlete': athlete,
+		'activities': activities,
+	}
+	
+	print "athlete", athlete
+	#print "activities:", activities
+	return render(request, 'main/profile.html', content)
+
 
 # def getActivities(request) :
 # 	url = "https://www.strava.com/api/v3/athlete/activities"

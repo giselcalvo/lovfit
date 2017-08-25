@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main/css/styles.css' %}" media="screen" title="no title" charset="utf-8">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src= 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+
+</head>
+<body>
+<div id="container">
+<div id="header">
+<h2>profile</h2>
+
+</div>
+
+<div id="sidebar">
+<img id="profilePic" src={{athlete.profile}}>
+<h3>{{athlete.firstname}}</h3>
+
+<h5>{{athlete.country}}</h5>
+
+<p>{{athlete.updated_at}}</p>
+<p></p>
+</div>
+
+<div id="content">
+	
+
+
+</div>
+
+</div>
+
+</body>
+</html>
