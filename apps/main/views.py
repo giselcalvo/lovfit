@@ -93,12 +93,10 @@ def dashboard(request) :
 	sortByTime(allActs)
 	allActs = allActs[:10]
 	for item in allActs :
-		item['athlete']['first_name'] = allUsers.get(STRA_id = item['athlete']['id']).first_name
-		item['athlete']['uid'] = allUsers.get(STRA_id = item['athlete']['id']).id
-		url = "https://www.strava.com/api/v3/athlete"
-		headers = {'Authorization': "Bearer " + decodeToken(allUsers.get(STRA_id = item['athlete']['id']).STRA_accessToken)}
-		response = requests.get(url, headers=headers).json()
-		item['athlete']['profile'] = response['profile_medium']
+		thisUser = allUsers.get(STRA_id = item['athlete']['id'])
+		item['athlete']['first_name'] = thisUser.first_name
+		item['athlete']['uid'] = thisUser.id
+		item['athlete']['profile'] = thisUser.STRA_pic
 		item['distance'] = round(float(item['distance']) / 5280, 2)
 		item['start_date_local'] = strftime("%c", strptime(item['start_date_local'], "%Y-%m-%dT%H:%M:%SZ"))
 		item['photos'] = []
@@ -195,7 +193,6 @@ def show_profile(request, user_id):
 	if match==1:
 		like=True
 	matches=User.objects.matches(request.session['id'])
-	print matches
 
 	content = {
 		'athlete': athlete,

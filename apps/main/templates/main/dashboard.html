@@ -12,43 +12,44 @@
 	<body>
 		<div id="container">
 			<div id="header">
-			<img class="logo" src="{% static 'main/img/lovfit(small).png' %}">
-
+				<img class="logo" src="{% static 'main/img/lovfit(small).png' %}">
 			</div>
 			<div id="sidebar">
-
-		<h1 id="profile_name"> Hello, {{ athlete.firstname }}</h1>
-		<a href="/show_profile/{{request.session.id}}"><img id="profilePic" src="{{ athlete.profile }}" alt="Check out your profile"></a>
-		<h3>Located in {{ athlete.city }} {{ athlete.state }}</h3>
-		<p></p>
-		<p><a href="/logout/">	<img class="logout" src="{% static 'main/img/logout.ico' %}"></a></p>
-
-
+				<h1 id="profile_name"> Hello, {{ athlete.firstname }}</h1>
+				<a href="/show_profile/{{request.session.id}}"><img id="profilePic" src="{{ athlete.profile }}" alt="Check out your profile"></a>
+				<h3>Located in {{ athlete.city }} {{ athlete.state }}</h3>
+				<p></p>
+				<p><a href="/logout/">	<img class="logout" src="{% static 'main/img/logout.ico' %}"></a></p>
 			</div>
-
-
-
-		<div id="content">
-			<h2>Sports News</h2>
-			<hr>
-				{% if activities %}
-				{% for item in activities %}
-					<img src="{{ item.athlete.profile }}">
-				<p><a href="/show_profile/{{ item.athlete.uid }}">{{ item.athlete.first_name }}</a> did a {{ item.name }} for {{ item.distance }}mi at {{ item.start_date_local }}</p>
-				<ul>
-					<li>Average Speed: {{ item.average_speed }}mph</li>
-					<li>Max Speed: {{ item.max_speed }}mph</li>
-					<li>Total Elevation Gain: {{ item.total_elevation_gain }}ft</li>
-					<li>Total Time: {{ item.elapsed_time }}</li>
-				</ul>
-				{% for photo in item.photos %}
-					<img src="{{ photo }}">
+			<div id="content">
+				<h2>Sports News</h2>
+				{% for activity in activities %}
+					<div class="activity">
+						<table>
+							<tr>
+								<td rowspan="2"><img class="profilePicc" src="{{ activity.athlete.profile }}"></td>
+								<td class="activity_name" colspan="3">{{ activity.name }}</td>
+							</tr>
+							<tr>
+								<td>Distance: {{ activity.distance }}mi</td>
+								<td>Elevation Gain: {{ activity.total_elevation_gain }}ft</td>
+								<td>Total Time: {{ activity.elapsed_time }}</td>
+							</tr>
+							<tr>
+								<td><a class="profileLink" href="/show_profile/{{ activity.athlete.uid }}">{{ activity.athlete.first_name }}</a></td>
+								<td>Average Speed: {{ activity.average_speed }}mph</td>
+								<td>Max Speed: {{ activity.max_speed }}mph</td>
+								<td class="start">{{ activity.start_date_local }}</td>
+							</tr>
+						</table>
+						<div id="photos">
+							{% for photo in activity.photos %}
+								<img class="act_pic" src="{{ photo }}">
+							{% endfor %}
+						</div>
+					</div>
 				{% endfor %}
-			{% endfor %}
-		{% endif %}
-		</div>
-
-
+			</div>
 		</div>
 	</body>
 </html>
