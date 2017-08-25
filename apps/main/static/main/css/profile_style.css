@@ -6,6 +6,10 @@
 	font-size: 16px;
 }
 
+html, body{
+	height:98%;
+}
+
 #sidebar, #content{
 	display: inline-block;
 }
@@ -14,17 +18,24 @@
 	background-color: #1aa9b1;
 	border-radius:20px;
 	padding:20px;
+	height:100%;
 
 }
 
 #sidebar{
-	width:25%;
+	vertical-align: top;
+	width:20%;
+	text-align: center;
 }
 
 #content{
 	background-color: white;
-	width:70%;
-
+	width:75%;
+	height:85%;
+	overflow: scroll;
+	padding:3%;
+	opacity: 0.85;
+	margin-top:1%;
 }
 
 #profilePic{
@@ -32,7 +43,7 @@
 }
 
 #header{
-	height:100px;
+	height:10%;
 }
 
 .logo{
@@ -40,3 +51,33 @@
 	margin:auto;
 	height:100%;
 }
+
+#profile_name{
+	font-size: 30px;
+	color:white;
+
+}
+
+.activity:hover{
+	opacity:0.8;
+}
+.activity{
+	opacity:0.65;
+	border:2px solid black;
+
+}
+
+h2{
+	font-size: 30px;
+	font-family: 'Open Sans Condensed', sans-serif;
+	text-shadow: 2px 2px grey;
+	text-transform: uppercase;
+}
+
+
+
+
+
+
+
+
