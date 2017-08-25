@@ -17,12 +17,17 @@
 		<h2>Sports News</h2>
 		{% if activities %}
 			{% for item in activities %}
-				<p><a href="/show_profile/{{ item.athlete.uid }}">{{ item.athlete.first_name }}</a> did a {{ item.name }} for {{ item.distance }}ft at {{ item.start_date_local }}</p>
+				<img src="{{ item.athlete.profile }}">
+				<p><a href="/show_profile/{{ item.athlete.uid }}">{{ item.athlete.first_name }}</a> did a {{ item.name }} for {{ item.distance }}mi at {{ item.start_date_local }}</p>
 				<ul>
 					<li>Average Speed: {{ item.average_speed }}mph</li>
-					<li>Max Speed: {{ item.max_speed }}</li>
+					<li>Max Speed: {{ item.max_speed }}mph</li>
 					<li>Total Elevation Gain: {{ item.total_elevation_gain }}ft</li>
+					<li>Total Time: {{ item.elapsed_time }}</li>
 				</ul>
+				{% for photo in item.photos %}
+					<img src="{{ photo }}">
+				{% endfor %}
 			{% endfor %}
 		{% endif %}
 		</div>

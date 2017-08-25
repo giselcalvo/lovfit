@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
-from time import gmtime, strftime
+from time import gmtime, strftime, strptime
 from django.views.decorators.csrf import csrf_exempt
 import json, base64
 from models import User
@@ -14,14 +14,12 @@ def index(request):
 
 @csrf_exempt
 def create_user(request):
-	# return strava_login()
 	print 'create user'
 	data = json.loads(request.POST['content'])
 	result = User.objects.user_validator(data)
 	request.session['id'] = result.id
 	request.session['first_name'] = result.first_name
 	return HttpResponse("success")
-	# return redirect('/strava_login/')
 
 def strava_login(request) :
 	print "strava_login"
@@ -97,11 +95,34 @@ def dashboard(request) :
 	for item in allActs :
 		item['athlete']['first_name'] = allUsers.get(STRA_id = item['athlete']['id']).first_name
 		item['athlete']['uid'] = allUsers.get(STRA_id = item['athlete']['id']).id
+		url = "https://www.strava.com/api/v3/athlete"
+		headers = {'Authorization': "Bearer " + decodeToken(allUsers.get(STRA_id = item['athlete']['id']).STRA_accessToken)}
+		response = requests.get(url, headers=headers).json()
+		item['athlete']['profile'] = response['profile_medium']
+		item['distance'] = round(float(item['distance']) / 5280, 2)
+		item['start_date_local'] = strftime("%c", strptime(item['start_date_local'], "%Y-%m-%dT%H:%M:%SZ"))
+		item['photos'] = []
+		if int(item['total_photo_count']) :
+			url = "https://www.strava.com/api/v3/activities/"
+			url += str(item['id'])
+			url += "/photos?photo_sources=true"
+			response = requests.get(url, headers=headers).json()
+			for stuff in response :
+				item['photos'].append(stuff['urls']['0'])
+		item['elapsed_time'] = convertTime(item['elapsed_time'])
 	content = {
 		'athlete': athlete,
 		'activities': allActs
 	}
 	return render(request, 'main/dashboard.html', content)
+
+def convertTime(seconds) :
+	rs = str(int(seconds) / 3600) + ':'
+	seconds = int(seconds) % 3600
+	rs += str(seconds / 60) + ':'
+	seconds = seconds % 60
+	rs += str(seconds)
+	return rs
 
 def sortByTime(acts) :
 	sortHelper(acts, 0, len(acts) - 1)
@@ -130,7 +151,6 @@ def sortHelper(acts, start, end) :
 	sortHelper(acts, start, right)
 	sortHelper(acts, left, end)
 
-
 def logout(request):
 	print 'logout'
 	request.session.clear()
@@ -140,18 +160,29 @@ def show_profile(request, user_id):
 	if not 'id' in request.session :
 		return redirect('/')
 	print "show_profile"
-	content = {}
 	user = User.objects.get(id=user_id)
 
 	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
-	url = "https://www.strava.com/api/v3/athletes/"
-	url += user.STRA_id
+	url = "https://www.strava.com/api/v3/athlete"
 	athlete = requests.get(url, headers=headers).json()
 
 	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
 	url = "https://www.strava.com/api/v3/athlete/activities/"
 	data = {'per_page': 10}
 	activities = requests.get(url, headers=headers, params=data).json()
+	for activity in activities :
+		activity['start_date_local'] = strftime("%c", strptime(activity['start_date_local'], "%Y-%m-%dT%H:%M:%SZ"))
+		activity['elapsed_time'] = convertTime(activity['elapsed_time'])
+		activity['distance'] = round(float(activity['distance']) / 5280, 2)
+		activity['photos'] = []
+		if int(activity['total_photo_count']) :
+			url = "https://www.strava.com/api/v3/activities/"
+			url += str(activity['id'])
+			url += "/photos?photo_sources=true"
+			response = requests.get(url, headers=headers).json()
+			for stuff in response :
+				activity['photos'].append(stuff['urls']['0'])
+		print activity['photos']
 
 	content = {
 		'athlete': athlete,
@@ -165,5 +196,4 @@ def like(request, liked_user_id):
 	liked_user = User.objects.get(STRA_id=liked_user_id)
 	user = User.objects.likeUser(request.session['id'], liked_user.id)
 	print user
-	#check match
 	return redirect('/show_profile/'+str(liked_user.id))
