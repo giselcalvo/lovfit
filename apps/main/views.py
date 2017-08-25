@@ -171,7 +171,7 @@ def show_profile(request, user_id):
 	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
 	url = "https://www.strava.com/api/v3/athlete"
 	athlete = requests.get(url, headers=headers).json()
-
+	athlete['updated_at'] = strftime("%c", strptime(athlete['updated_at'], "%Y-%m-%dT%H:%M:%SZ"))
 	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
 	url = "https://www.strava.com/api/v3/athlete/activities/"
 	data = {'per_page': 10}
