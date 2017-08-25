@@ -28,6 +28,24 @@
 </div>
 
 <div id="content">
+	<h3>Sport news</h3>
+	
+	{%for activity in activities%}
+	<div id="activity">
+		<h4>{{activity.name}}</h4>
+		<p>{{activity.type}}</p>
+
+		<label>{{ activity.location_city}} , {{activity.location_state}}</label>
+		{{activity.photos}}
+		<ul>
+			<li>Date: {{activity.start_date}}</li>
+			<li>Distance: {{activity.distance}}</li>
+			<li>Elapsed Time: {{activity.elapsed_time}}</li>
+			<li>Elevation: {{activity.total_elevation_gain}}</li>
+
+		</ul>
+	</div>
+	{%endfor%}
 	
 
 

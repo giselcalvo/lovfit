@@ -103,8 +103,8 @@ def show_profile(request, user_id):
 		'activities': activities,
 	}
 	
-	print "athlete", athlete
-	#print "activities:", activities
+	#print "athlete", athlete
+	print "activities:", activities
 	return render(request, 'main/profile.html', content)
 
 
