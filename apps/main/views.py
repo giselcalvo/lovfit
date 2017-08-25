@@ -139,9 +139,13 @@ def logout(request):
 def show_profile(request, user_id):
 	# if not 'id' in request.session :
 	# 	return redirect('/')
+	if not 'id' in request.session :
+		return redirect('/')
+
 	otherUser=True
 	if str(request.session['id'])==str(user_id):
 		otherUser=False
+
 
 	print "show_profile"
 	content = {}
@@ -173,8 +177,6 @@ def show_profile(request, user_id):
 		'like':like,
 		'otherUser':otherUser
 	}
-	print ('otherUser', otherUser)
-#	print "activities:", activities
 	return render(request, 'main/profile.html', content)
 
 def like(request, liked_user_id):
@@ -196,12 +198,4 @@ def match(request, liked_user_id):
 	}
 	return render(request, "main/match.html", content)
 
-# def getActivities(request) :
-# 	url = "https://www.strava.com/api/v3/athlete/activities"
-# 	headers = {'Authorization': "Bearer "+request.session['access_token']}
-# 	data = {'per_page': 10}
-# 	response = requests.get(url, headers=headers, params=data)
-# 	response = response.json()
-# 	print response
-# 	return render(request, 'login/activities.html', {'content': response})
 
