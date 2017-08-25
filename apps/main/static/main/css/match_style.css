@@ -46,3 +46,8 @@ h1{
 	text-transform: uppercase;
 	color:white;
 }
+
+#heart{
+	width:80px;
+	opacity:0.65;
+}

@@ -16,7 +16,8 @@
 <h1> You and {{match.first_name}} got <img id="logo" src="{% static 'main/img/lovfit(small).png' %}">
 <a href="/show_profile/{{user.id}}">
 <img class="profile" src="{{user.STRA_pic}}" alt="{{user.first_name}}"></a>
-<a href="/show_profile/{{match.id}}">
+<!-- <img id="heart" src="{% static 'main/img/heart.png' %}">
+ --><a href="/show_profile/{{match.id}}">
 <img class="profile" src="{{match.STRA_pic}}" alt="{{match.first_name}}"></a>
 </div>
 

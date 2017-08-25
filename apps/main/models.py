@@ -14,7 +14,7 @@ class UserManager(models.Manager):
 			user = User.objects.create(FB_id=postData['FB_id'], first_name=postData['first_name'])
 		return user
 
-	def add_Strava(request, data) :
+	def add_Strava(self, data) :
 		if 'athlete' not in data or 'access' not in data or 'user_id' not in data :
 			return False
 		if 'id' not in data['athlete'] or 'profile_medium' not in data['athlete'] :
@@ -29,22 +29,24 @@ class UserManager(models.Manager):
 		user.save()
 		return True
 
-	def getUser(request, uid):
+	def getUser(self, uid):
 		try :
 			user = User.objects.get(id = uid)
 			return user
 		except :
 			return False
 
-	def likeUser(request, user_id, liked_user_id):
-		Like.objects.create(user_likes=User.objects.get(id=user_id), liked_user=User.objects.get(id=liked_user_id))
+	def likeUser(self, user_id, liked_user_id):
+		result = self.matchcheck(user_id, liked_user_id)
+		if result ==0:
+			Like.objects.create(user_likes=User.objects.get(id=user_id), liked_user=User.objects.get(id=liked_user_id))
 		try:
 			Like.objects.get(user_likes=User.objects.get(id=liked_user_id), liked_user=User.objects.get(id=user_id))
 			return True		
 		except:
 			return False
 
-	def matchcheck(request, user_id, liked_user_id):
+	def matchcheck(self, user_id, liked_user_id):
 		try:
 			user= Like.objects.get(user_likes=User.objects.get(id=user_id),liked_user=User.objects.get(id=liked_user_id))
 			try:

@@ -194,6 +194,7 @@ def show_profile(request, user_id):
 
 	if match==1:
 		like=True
+	print (match)
 	content = {
 		'athlete': athlete,
 		'activities': activities,
@@ -206,7 +207,7 @@ def show_profile(request, user_id):
 
 def like(request, liked_user_id):
 	print "like"
-	liked_user = User.objects.get(STRA_id=liked_user_id)
+	liked_user = User.objects.get(id=liked_user_id)
 	user = User.objects.likeUser(request.session['id'], liked_user.id)
 	liked_user = User.objects.get(id=liked_user_id)
 	match = User.objects.likeUser(request.session['id'], liked_user_id)
