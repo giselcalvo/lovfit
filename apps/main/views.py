@@ -95,6 +95,7 @@ def dashboard(request) :
 	allActs = allActs[:10]
 	for item in allActs :
 		item['athlete']['first_name'] = allUsers.get(STRA_id = item['athlete']['id']).first_name
+		item['athlete']['uid'] = allUsers.get(STRA_id = item['athlete']['id']).id
 	content = {
 		'athlete': athlete,
 		'activities': allActs
