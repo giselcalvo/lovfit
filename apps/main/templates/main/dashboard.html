@@ -10,7 +10,21 @@
 	</head>
 	<body>
 		<div id="wrapper">
-			<button type="button" onclick="location.href='/logout/'">logout</button>
+		<h1>Hello, {{ athlete.firstname }}</h1>
+		<img src="{{ athlete.profile }}">
+		<h3>{{athlete.city}} {{athlete.state}} {{athlete.country}}</h3>
+		<button type="button" onclick="location.href='/logout/'">logout</button>
+		<h2>Sports News</h2>
+		{% if activities %}
+			{% for item in activities %}
+				<p><a href="/show_profile/{{ item.athlete.id }}">{{ item.athlete.first_name }}</a> did a {{ item.name }} for {{ item.distance }}ft at {{ item.start_date_local }}</p>
+				<ul>
+					<li>Average Speed: {{ item.average_speed }}mph</li>
+					<li>Max Speed: {{ item.max_speed }}</li>
+					<li>Total Elevation Gain: {{ item.total_elevation_gain }}ft</li>
+				</ul>
+			{% endfor %}
+		{% endif %}
 		</div>
 	</body>
 </html>
