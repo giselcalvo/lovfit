@@ -74,6 +74,22 @@ h2{
 	text-transform: uppercase;
 }
 
+button{
+	font-size: 30px;
+	border-radius:50%;
+
+
+}
+
+#heart{
+	width:50px;
+	opacity:0.65;
+}
+
+#heart:hover{
+	opacity:1;
+}
+
 
 
 

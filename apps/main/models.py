@@ -37,11 +37,25 @@ class UserManager(models.Manager):
 			return False
 
 	def likeUser(request, user_id, liked_user_id):
-		user = User.objects.get(id=user_id)
-		liked_user = User.objects.get(id=liked_user_id)
-		user.user_likes.add(liked_user)
+		Like.objects.create(user_likes=User.objects.get(id=user_id), liked_user=User.objects.get(id=liked_user_id))
+		try:
+			Like.objects.get(user_likes=User.objects.get(id=liked_user_id), liked_user=User.objects.get(id=user_id))
+			return True		
+		except:
+			return False
 
-		return False
+	def matchcheck(request, user_id, liked_user_id):
+		print (user_id)
+		print(liked_user_id)
+		try:
+			user= Like.objects.get(user_likes=User.objects.get(id=user_id),liked_user=User.objects.get(id=liked_user_id))
+			try:
+				liked= Like.objects.get(user_likes=User.objects.get(id=liked_user_id),liked_user=User.objects.get(id=user_id))
+				return 2
+			except:
+				return 1
+		except:
+			return 0
 
 
 class User(models.Model):
@@ -50,11 +64,10 @@ class User(models.Model):
 	STRA_id = models.CharField(max_length=255, null=True)
 	STRA_accessToken = models.TextField(null=True)
 	STRA_pic = models.CharField(max_length=255, null=True)
-	user_friends = models.ManyToManyField('self', related_name='friends_friends')
-	user_likes = models.ManyToManyField('self', related_name='liked_by')
 	objects = UserManager()
 
 
-# class Like(models.Model):
-# 	this_user_likes = models.ForeignKey(User, related_name="liked_by")
-# 	liked_by_user= models.ForeignKey(User, related_name="likes")
+class Like(models.Model):
+ 	user_likes = models.ForeignKey(User, related_name="likes")
+ 	liked_user= models.ForeignKey(User, related_name="liked_by")
+

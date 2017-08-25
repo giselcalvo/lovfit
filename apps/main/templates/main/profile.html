@@ -21,22 +21,29 @@
 
 <img id="profilePic" src={{athlete.profile}}>
 <h3>Located in {{athlete.city}} {{athlete.state}}</h3>
-<!-- {% if country in athlete %}
-<h3> {{athlete.country }}</h3>
-{% endif %} -->
+
 <p>Last active on strava : <br>{{athlete.updated_at}}</p>
 
-<form action="/like/{{athlete.id}}">
-	
-	<button>Like</button>
-</form>
+
+
+{% if otherUser %}
+	{% if like %}
+		<h2> Liked </h2>
+	{% else %}
+		{% if match %}
+			<h2> Matched </h2>
+		{% else %}
+			<a href="/like/{{id}}"><img id="heart" src="{% static 'main/img/heart.png' %}"></a>
+		{% endif %}
+	{% endif %}
+{% endif %}
 
 
 <p></p>
 </div>
 
 <div id="content">
-	<h2>Top 10 news for {{athlete.firstname}}</h2>
+	<h2>Latest 10 records for {{athlete.firstname}}</h2>
 	<hr>
 	
 	{%for activity in activities%}
@@ -49,7 +56,7 @@
 		<label>{{ activity.location_city}} , {{activity.location_state}}</label>
 		{{activity.photos}}
 		<ul>
-			<li>Date: {{activity.start_date}}</li>
+			<li>Date: {{activity.start_date_local}}</li>
 			<li>Distance: {{activity.distance}}</li>
 			<li>Elapsed Time: {{activity.elapsed_time}}</li>
 			<li>Elevation: {{activity.total_elevation_gain}}</li>

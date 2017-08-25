@@ -139,10 +139,16 @@ def logout(request):
 def show_profile(request, user_id):
 	# if not 'id' in request.session :
 	# 	return redirect('/')
+	otherUser=True
+	if str(request.session['id'])==str(user_id):
+		otherUser=False
+
 	print "show_profile"
 	content = {}
 	user = User.objects.get(id=user_id)
 
+	print ("request id", request.session['id'])
+	print("user_id", user_id)
 	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
 	url = "https://www.strava.com/api/v3/athletes/"
 	url += user.STRA_id
@@ -152,25 +158,43 @@ def show_profile(request, user_id):
 	url = "https://www.strava.com/api/v3/athlete/activities/"
 	data = {'per_page': 10}
 	activities = requests.get(url, headers=headers, params=data).json()
+	match = User.objects.matchcheck(request.session['id'], user_id)
+	like=False
 
+	if match==1:
+		like=True
+	print ("match" , match)
+	print ("like", like)
 	content = {
 		'athlete': athlete,
 		'activities': activities,
+		'match':match,
+		'id':user_id,
+		'like':like,
+		'otherUser':otherUser
 	}
-	
-	print "activities:", activities
+	print ('otherUser', otherUser)
+#	print "activities:", activities
 	return render(request, 'main/profile.html', content)
 
 def like(request, liked_user_id):
 	print "like"
-	liked_user = User.objects.get(STRA_id=liked_user_id)
-	user = User.objects.likeUser(request.session['id'], liked_user.id)
-	print user
-	#check match
+	liked_user = User.objects.get(id=liked_user_id)
+	match = User.objects.likeUser(request.session['id'], liked_user_id)
+	if match :
+		return redirect('/match/'+str(liked_user_id))
 	return redirect('/show_profile/'+str(liked_user.id))
 
 
-
+def match(request, liked_user_id):
+	result = User.objects.matchcheck(request.session['id'], liked_user_id)
+	if result <2:
+		return redirect('/show_profile/'+str(liked_user_id))
+	content={
+		'user':User.objects.get(id=request.session['id']),
+		'match':User.objects.get(id=liked_user_id),
+	}
+	return render(request, "main/match.html", content)
 
 # def getActivities(request) :
 # 	url = "https://www.strava.com/api/v3/athlete/activities"
