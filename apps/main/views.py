@@ -21,6 +21,7 @@ def create_user(request):
 	request.session['id'] = result.id
 	request.session['first_name'] = result.first_name
 	return HttpResponse("success")
+	# return redirect('/strava_login/')
 
 def strava_login(request) :
 	print "strava_login"
@@ -129,12 +130,15 @@ def sortHelper(acts, start, end) :
 	sortHelper(acts, start, right)
 	sortHelper(acts, left, end)
 
+
 def logout(request):
 	print 'logout'
 	request.session.clear()
 	return redirect('/')
 
 def show_profile(request, user_id):
+	if not 'id' in request.session :
+		return redirect('/')
 	print "show_profile"
 	content = {}
 	user = User.objects.get(id=user_id)
@@ -155,3 +159,11 @@ def show_profile(request, user_id):
 	}
 	
 	return render(request, 'main/profile.html', content)
+
+def like(request, liked_user_id):
+	print "like"
+	liked_user = User.objects.get(STRA_id=liked_user_id)
+	user = User.objects.likeUser(request.session['id'], liked_user.id)
+	print user
+	#check match
+	return redirect('/show_profile/'+str(liked_user.id))

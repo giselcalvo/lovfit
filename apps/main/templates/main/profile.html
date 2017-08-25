@@ -12,28 +12,36 @@
 <body>
 <div id="container">
 <div id="header">
-<img class="logo" src="{% static 'main/img/lovfit.png' %}">
-
-<h2>profile</h2>
+<img class="logo" src="{% static 'main/img/lovfit(small).png' %}">
 
 </div>
 
 <div id="sidebar">
+<h1 id="profile_name">{{athlete.firstname}} {{athlete.lastname}}</h1>
+
 <img id="profilePic" src={{athlete.profile}}>
-<h3>{{athlete.firstname}}</h3>
+<h3>Located in {{athlete.city}} {{athlete.state}}</h3>
+<!-- {% if country in athlete %}
+<h3> {{athlete.country }}</h3>
+{% endif %} -->
+<p>Last active on strava : <br>{{athlete.updated_at}}</p>
 
-<h5>{{athlete.city}} {{athlete.state}} {{athlete.country}}</h5>
+<form action="/like/{{athlete.id}}">
+	
+	<button>Like</button>
+</form>
 
-<p>{{athlete.updated_at}}</p>
 <p></p>
 </div>
 
 <div id="content">
-
-	<h3>Sport news</h3>
+	<h2>Top 10 news for {{athlete.firstname}}</h2>
+	<hr>
 	
 	{%for activity in activities%}
-	<div id="activity">
+	<div class="activity">
+
+
 		<h4>{{activity.name}}</h4>
 		<p>{{activity.type}}</p>
 
@@ -48,9 +56,6 @@
 		</ul>
 	</div>
 	{%endfor%}
-	
-
-
 </div>
 
 </div>
