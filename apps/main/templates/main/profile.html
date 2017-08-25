@@ -47,20 +47,17 @@
 	
 	{%for activity in activities%}
 	<div class="activity">
-
-
 		<h4>{{activity.name}}</h4>
-		<p>{{activity.type}}</p>
-
-		<label>{{ activity.location_city}} , {{activity.location_state}}</label>
-		<ul>
-			<li>Date: {{activity.start_date_local}}</li>
+<!-- 		<label>{{ activity.location_city}} , {{activity.location_state}}</label>
+ -->		<ul>
+ 			<li><div class="{{activity.type}}"></div></li>
 			<li>Distance: {{activity.distance}}</li>
 			<li>Elapsed Time: {{activity.elapsed_time}}</li>
 			<li>Elevation: {{activity.total_elevation_gain}}</li>
-		</ul>
+			<li>Date: {{activity.start_date_local}}</li>
+			</ul>
 		{% for photo in activity.photos %}
-			<img src="{{ photo }}">
+			<img class="act_pic" src="{{ photo }}">
 		{% endfor %}
 	</div>
 	{%endfor%}
