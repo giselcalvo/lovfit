@@ -6,20 +6,16 @@
 	font-size: 16px;
 }
 
-html, body{
-	height:98%;
+#container{
+	background-color: #1aa9b1;
+	width: 90%;
+	margin: 0 auto;
+	border-radius: 20px;
+	padding: 20px;
 }
 
 #sidebar, #content{
 	display: inline-block;
-}
-
-#container{
-	background-color: #1aa9b1;
-	border-radius:20px;
-	padding:20px;
-	height:100%;
-
 }
 
 #sidebar{
@@ -31,8 +27,6 @@ html, body{
 #content{
 	background-color: white;
 	width:75%;
-	height:85%;
-	overflow: scroll;
 	padding:3%;
 	opacity: 0.85;
 	margin-top:1%;
@@ -91,8 +85,16 @@ button{
 	opacity:1;
 }
 
+#photos {
+	margin-left: 10%;
+}
+
 .act_pic:hover{
 	width:200px;
+}
+
+ul, .Ride, .Run {
+	vertical-align: middle;
 }
 
 li{
@@ -102,8 +104,6 @@ li{
 	vertical-align: center;
 
 }
-
-
 
 .Ride{
 	width:50px;

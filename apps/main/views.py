@@ -87,7 +87,7 @@ def dashboard(request) :
 		if len(allUsers) >= 10 :
 			data = {'per_page': 1}
 		else :
-			data = {'per_page': 5}
+			data = {'per_page': 10 / (len(allUsers) - 1) + 1}
 		response = requests.get(url, headers=headers, params=data).json()
 		allActs += response
 	sortByTime(allActs)
