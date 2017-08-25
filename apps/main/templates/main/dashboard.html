@@ -3,21 +3,37 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-        {% load static %}
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'main/css/profile_style.css' %}" media="screen" title="no title" charset="utf-8">
 		<script src= 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 		<script type="text/javascript">
 		</script>
 	</head>
 	<body>
-		<div id="wrapper">
-		<h1>Hello, {{ athlete.firstname }}</h1>
-		<img src="{{ athlete.profile }}">
-		<h3>{{athlete.city}} {{athlete.state}} {{athlete.country}}</h3>
-		<button type="button" onclick="location.href='/logout/'">logout</button>
-		<h2>Sports News</h2>
-		{% if activities %}
-			{% for item in activities %}
-				<img src="{{ item.athlete.profile }}">
+		<div id="container">
+			<div id="header">
+			<img class="logo" src="{% static 'main/img/lovfit(small).png' %}">
+
+			</div>
+			<div id="sidebar">
+
+		<h1 id="profile_name"> Hello, {{ athlete.firstname }}</h1>
+		<a href="/show_profile/{{request.session.id}}"><img id="profilePic" src="{{ athlete.profile }}" alt="Check out your profile"></a>
+		<h3>Located in {{ athlete.city }} {{ athlete.state }}</h3>
+		<p></p>
+		<p><a href="/logout/">	<img class="logout" src="{% static 'main/img/logout.ico' %}"></a></p>
+
+
+			</div>
+
+
+
+		<div id="content">
+			<h2>Sports News</h2>
+			<hr>
+				{% if activities %}
+				{% for item in activities %}
+					<img src="{{ item.athlete.profile }}">
 				<p><a href="/show_profile/{{ item.athlete.uid }}">{{ item.athlete.first_name }}</a> did a {{ item.name }} for {{ item.distance }}mi at {{ item.start_date_local }}</p>
 				<ul>
 					<li>Average Speed: {{ item.average_speed }}mph</li>
@@ -30,6 +46,9 @@
 				{% endfor %}
 			{% endfor %}
 		{% endif %}
+		</div>
+
+
 		</div>
 	</body>
 </html>
