@@ -57,6 +57,12 @@ class UserManager(models.Manager):
 		except:
 			return 0
 
+	def matches(self, user_id):
+		matches= User.objects.filter(likes__liked_user=user_id, liked_by__user_likes=user_id)
+		return matches
+
+
+
 
 class User(models.Model):
 	first_name = models.CharField(max_length=255, null=True)

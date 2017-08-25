@@ -194,14 +194,17 @@ def show_profile(request, user_id):
 
 	if match==1:
 		like=True
-	print (match)
+	matches=User.objects.matches(request.session['id'])
+	print matches
+
 	content = {
 		'athlete': athlete,
 		'activities': activities,
 		'match':match,
 		'id':user_id,
 		'like':like,
-		'otherUser':otherUser
+		'otherUser':otherUser,
+		'matches':matches
 	}
 	return render(request, 'main/profile.html', content)
 

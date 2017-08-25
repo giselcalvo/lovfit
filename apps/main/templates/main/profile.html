@@ -26,7 +26,15 @@
 							<a href="/like/{{id}}"><img id="heart" src="{% static 'main/img/heart.png' %}"></a>
 						{% endif %}
 					{% endif %}
+				{%else %}
+					{% if matches %}
+						<h3> Your matches </h3>
+						{% for match in matches %}
+							<a href="/show_profile/{{match.id}}"><img class="matches" src="{{match.STRA_pic}}"></a>
+						{% endfor %}
+					{% endif %}				
 				{% endif %}
+				<p><a href="/dashboard/">	<img class="logout" src="{% static 'main/img/logout.ico' %}"></a></p>
 			</div>
 			<div id="content">
 				<h2>Latest 10 records for {{ athlete.firstname }}</h2>
