@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main/css/profile_style.css' %}" media="screen" title="no title" charset="utf-8">
+
+	<script src= 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+
+</head>
+<body>
+<div id="container">
+<div id="header">
+<img class="logo" src="{% static 'main/img/lovfit.png' %}">
+
+<h2>profile</h2>
+
+</div>
+
+<div id="sidebar">
+<img id="profilePic" src={{athlete.profile}}>
+<h3>{{athlete.firstname}}</h3>
+
+<h5>{{athlete.country}}</h5>
+
+<p>{{athlete.updated_at}}</p>
+<p></p>
+</div>
+
+<div id="content">
+
+	<h3>Sport news</h3>
+	
+	{%for activity in activities%}
+	<div id="activity">
+		<h4>{{activity.name}}</h4>
+		<p>{{activity.type}}</p>
+
+		<label>{{ activity.location_city}} , {{activity.location_state}}</label>
+		{{activity.photos}}
+		<ul>
+			<li>Date: {{activity.start_date}}</li>
+			<li>Distance: {{activity.distance}}</li>
+			<li>Elapsed Time: {{activity.elapsed_time}}</li>
+			<li>Elevation: {{activity.total_elevation_gain}}</li>
+
+		</ul>
+	</div>
+	{%endfor%}
+	
+
+
+</div>
+
+</div>
+
+</body>
+</html>
