@@ -76,7 +76,60 @@ def dashboard(request) :
 	user = User.objects.getUser(request.session['id'])
 	if not user :
 		return ('/logout/')
-	return render(request, 'main/dashboard.html')
+	url = "https://www.strava.com/api/v3/athlete"
+	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
+	athlete = requests.get(url, headers=headers).json()
+	allUsers = User.objects.all()
+	allActs = []
+	for item in allUsers :
+		if item == user :
+			continue
+		url = "https://www.strava.com/api/v3/athlete/activities"
+		headers = {'Authorization': "Bearer " + decodeToken(item.STRA_accessToken)}
+		if len(allUsers) >= 10 :
+			data = {'per_page': 1}
+		else :
+			data = {'per_page': 5}
+		response = requests.get(url, headers=headers, params=data).json()
+		allActs += response
+	sortByTime(allActs)
+	allActs = allActs[:10]
+	for item in allActs :
+		item['athlete']['first_name'] = allUsers.get(STRA_id = item['athlete']['id']).first_name
+		item['athlete']['uid'] = allUsers.get(STRA_id = item['athlete']['id']).id
+	content = {
+		'athlete': athlete,
+		'activities': allActs
+	}
+	return render(request, 'main/dashboard.html', content)
+
+def sortByTime(acts) :
+	sortHelper(acts, 0, len(acts) - 1)
+	return
+
+def sortHelper(acts, start, end) :
+	if start >= end :
+		return
+
+	left = start
+	right = end
+	middle = acts[(start + end) / 2]['start_date_local']
+
+	while left <= right :
+		while left <= right and acts[left]['start_date_local'] > middle :
+			left += 1
+		while left <= right and acts[right]['start_date_local'] < middle :
+			right -= 1
+		if left <= right :
+			temp = acts[left]
+			acts[left] = acts[right]
+			acts[right] = temp
+			left += 1
+			right -= 1
+
+	sortHelper(acts, start, right)
+	sortHelper(acts, left, end)
+
 
 def logout(request):
 	print 'logout'
@@ -109,12 +162,12 @@ def show_profile(request, user_id):
 	return render(request, 'main/profile.html', content)
 
 def like(request, liked_user_id):
-
-	User.objects.likeUser(request, request.session['id'], liked_user_id)
-
+	print "like"
+	liked_user = User.objects.get(STRA_id=liked_user_id)
+	user = User.objects.likeUser(request.session['id'], liked_user.id)
+	print user
 	#check match
-
-	redirect('/show_profile/')
+	return redirect('/show_profile/'+str(liked_user.id))
 
 
 

@@ -17,7 +17,7 @@
 		<h2>Sports News</h2>
 		{% if activities %}
 			{% for item in activities %}
-				<p><a href="/show_profile/{{ item.athlete.id }}">{{ item.athlete.first_name }}</a> did a {{ item.name }} for {{ item.distance }}ft at {{ item.start_date_local }}</p>
+				<p><a href="/show_profile/{{ item.athlete.uid }}">{{ item.athlete.first_name }}</a> did a {{ item.name }} for {{ item.distance }}ft at {{ item.start_date_local }}</p>
 				<ul>
 					<li>Average Speed: {{ item.average_speed }}mph</li>
 					<li>Max Speed: {{ item.max_speed }}</li>
