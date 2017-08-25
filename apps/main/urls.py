@@ -11,4 +11,6 @@ urlpatterns = [
 	url(r'^logout/$', views.logout),
 	url(r'^show_profile/(?P<user_id>\d+)$', views.show_profile),
 	url(r'^like/(?P<liked_user_id>\d+)$', views.like),
+	url(r'^match/(?P<liked_user_id>\d+)$', views.match),
+
 ]

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main/css/match_style.css' %}" media="screen" title="no title" charset="utf-8">
+
+	<script src= 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+
+</head>
+<body>
+
+<div id="match">
+
+<h1> You and {{match.first_name}} got <img id="logo" src="{% static 'main/img/lovfit(small).png' %}">
+<a href="/show_profile/{{user.id}}">
+<img class="profile" src="{{user.STRA_pic}}" alt="{{user.first_name}}"></a>
+<a href="/show_profile/{{match.id}}">
+<img class="profile" src="{{match.STRA_pic}}" alt="{{match.first_name}}"></a>
+</div>
+
+</body>
+
+</html>

@@ -159,6 +159,12 @@ def logout(request):
 def show_profile(request, user_id):
 	if not 'id' in request.session :
 		return redirect('/')
+
+	otherUser=True
+	if str(request.session['id'])==str(user_id):
+		otherUser=False
+
+
 	print "show_profile"
 	user = User.objects.get(id=user_id)
 
@@ -182,18 +188,41 @@ def show_profile(request, user_id):
 			response = requests.get(url, headers=headers).json()
 			for stuff in response :
 				activity['photos'].append(stuff['urls']['0'])
-		print activity['photos']
 
+	match = User.objects.matchcheck(request.session['id'], user_id)
+	like=False
+
+	if match==1:
+		like=True
 	content = {
 		'athlete': athlete,
 		'activities': activities,
+		'match':match,
+		'id':user_id,
+		'like':like,
+		'otherUser':otherUser
 	}
-	
 	return render(request, 'main/profile.html', content)
 
 def like(request, liked_user_id):
 	print "like"
 	liked_user = User.objects.get(STRA_id=liked_user_id)
 	user = User.objects.likeUser(request.session['id'], liked_user.id)
-	print user
+	liked_user = User.objects.get(id=liked_user_id)
+	match = User.objects.likeUser(request.session['id'], liked_user_id)
+	if match :
+		return redirect('/match/'+str(liked_user_id))
 	return redirect('/show_profile/'+str(liked_user.id))
+
+
+def match(request, liked_user_id):
+	result = User.objects.matchcheck(request.session['id'], liked_user_id)
+	if result <2:
+		return redirect('/show_profile/'+str(liked_user_id))
+	content={
+		'user':User.objects.get(id=request.session['id']),
+		'match':User.objects.get(id=liked_user_id),
+	}
+	return render(request, "main/match.html", content)
+
+
