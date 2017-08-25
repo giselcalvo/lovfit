@@ -1,5 +1,4 @@
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib import messages
 from time import gmtime, strftime, strptime
 from django.views.decorators.csrf import csrf_exempt
 import json, base64
