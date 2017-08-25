@@ -1,0 +1,42 @@
+
+*{
+	font-family: sans-serif;
+	color: #333333;
+	box-sizing:border-box;
+	font-size: 16px;
+}
+
+#sidebar, #content{
+	display: inline-block;
+}
+
+#container{
+	background-color: #1aa9b1;
+	border-radius:20px;
+	padding:20px;
+
+}
+
+#sidebar{
+	width:25%;
+}
+
+#content{
+	background-color: white;
+	width:70%;
+
+}
+
+#profilePic{
+	border-radius:50%;
+}
+
+#header{
+	height:100px;
+}
+
+.logo{
+	display: block;
+	margin:auto;
+	height:100%;
+}
