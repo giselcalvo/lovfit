@@ -21,6 +21,7 @@ def create_user(request):
 	request.session['id'] = result.id
 	request.session['first_name'] = result.first_name
 	return HttpResponse("success")
+	# return redirect('/strava_login/')
 
 def strava_login(request) :
 	print "strava_login"
@@ -75,58 +76,7 @@ def dashboard(request) :
 	user = User.objects.getUser(request.session['id'])
 	if not user :
 		return ('/logout/')
-	url = "https://www.strava.com/api/v3/athlete"
-	headers = {'Authorization': "Bearer " + decodeToken(user.STRA_accessToken)}
-	athlete = requests.get(url, headers=headers).json()
-	allUsers = User.objects.all()
-	allActs = []
-	for item in allUsers :
-		if item == user :
-			continue
-		url = "https://www.strava.com/api/v3/athlete/activities"
-		headers = {'Authorization': "Bearer " + decodeToken(item.STRA_accessToken)}
-		if len(allUsers) >= 10 :
-			data = {'per_page': 1}
-		else :
-			data = {'per_page': 5}
-		response = requests.get(url, headers=headers, params=data).json()
-		allActs += response
-	sortByTime(allActs)
-	allActs = allActs[:10]
-	for item in allActs :
-		item['athlete']['first_name'] = allUsers.get(STRA_id = item['athlete']['id']).first_name
-	content = {
-		'athlete': athlete,
-		'activities': allActs
-	}
-	return render(request, 'main/dashboard.html', content)
-
-def sortByTime(acts) :
-	sortHelper(acts, 0, len(acts) - 1)
-	return
-
-def sortHelper(acts, start, end) :
-	if start >= end :
-		return
-
-	left = start
-	right = end
-	middle = acts[(start + end) / 2]['start_date_local']
-
-	while left <= right :
-		while left <= right and acts[left]['start_date_local'] > middle :
-			left += 1
-		while left <= right and acts[right]['start_date_local'] < middle :
-			right -= 1
-		if left <= right :
-			temp = acts[left]
-			acts[left] = acts[right]
-			acts[right] = temp
-			left += 1
-			right -= 1
-
-	sortHelper(acts, start, right)
-	sortHelper(acts, left, end)
+	return render(request, 'main/dashboard.html')
 
 def logout(request):
 	print 'logout'
@@ -134,6 +84,8 @@ def logout(request):
 	return redirect('/')
 
 def show_profile(request, user_id):
+	# if not 'id' in request.session :
+	# 	return redirect('/')
 	print "show_profile"
 	content = {}
 	user = User.objects.get(id=user_id)
@@ -153,6 +105,26 @@ def show_profile(request, user_id):
 		'activities': activities,
 	}
 	
-	#print "athlete", athlete
 	print "activities:", activities
 	return render(request, 'main/profile.html', content)
+
+def like(request, liked_user_id):
+
+	User.objects.likeUser(request, request.session['id'], liked_user_id)
+
+	#check match
+
+	redirect('/show_profile/')
+
+
+
+
+# def getActivities(request) :
+# 	url = "https://www.strava.com/api/v3/athlete/activities"
+# 	headers = {'Authorization': "Bearer "+request.session['access_token']}
+# 	data = {'per_page': 10}
+# 	response = requests.get(url, headers=headers, params=data)
+# 	response = response.json()
+# 	print response
+# 	return render(request, 'login/activities.html', {'content': response})
+
