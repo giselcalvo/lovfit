@@ -30,17 +30,24 @@
 			</div>
 			<div id="content">
 				<h2>Latest 10 records for {{ athlete.firstname }}</h2>
-				<hr>
 				{% for activity in activities %}
 					<div class="activity">
-						<h4>{{ activity.name }}</h4>
-						<ul>
-				 			<li><div class="{{ activity.type }}"></div></li>
-							<li>Distance: {{ activity.distance }}</li>
-							<li>Elapsed Time: {{ activity.elapsed_time }}</li>
-							<li>Elevation: {{ activity.total_elevation_gain }}</li>
-							<li>Date: {{ activity.start_date_local }}</li>
-						</ul>
+						<table>
+							<tr>
+								<td rowspan="3"><div class="{{ activity.type }}"></div></td>
+								<td class="activity_name" colspan="3">{{ activity.name }}</td>
+							</tr>
+							<tr>
+								<td>Distance: {{ activity.distance }}mi</td>
+								<td>Elevation Gain: {{ activity.total_elevation_gain }}ft</td>
+								<td>Total Time: {{ activity.elapsed_time }}</td>
+							</tr>
+							<tr>
+								<td>Average Speed: {{ activity.average_speed }}mph</td>
+								<td>Max Speed: {{ activity.max_speed }}mph</td>
+								<td class="start">{{ activity.start_date_local }}</td>
+							</tr>
+						</table>
 						<div id="photos">
 							{% for photo in activity.photos %}
 								<img class="act_pic" src="{{ photo }}">
