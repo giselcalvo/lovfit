@@ -20,9 +20,18 @@
 <h1 id="profile_name">{{athlete.firstname}} {{athlete.lastname}}</h1>
 
 <img id="profilePic" src={{athlete.profile}}>
-<h3>Located in {{athlete.country}}</h3>
-
+<h3>Located in {{athlete.city}} {{athlete.state}}</h3>
+<!-- {% if country in athlete %}
+<h3> {{athlete.country }}</h3>
+{% endif %} -->
 <p>Last active on strava : <br>{{athlete.updated_at}}</p>
+
+<form action="/like/{{athlete.id}}">
+	
+	<button>Like</button>
+</form>
+
+
 <p></p>
 </div>
 

@@ -36,6 +36,13 @@ class UserManager(models.Manager):
 		except :
 			return False
 
+	def likeUser(request, user_id, liked_user_id):
+		user = User.objects.get(id=user_id)
+		liked_user = User.objects.get(id=liked_user_id)
+		user.user_likes.add(liked_user)
+
+		return False
+
 
 class User(models.Model):
 	first_name = models.CharField(max_length=255, null=True)
@@ -46,3 +53,8 @@ class User(models.Model):
 	user_friends = models.ManyToManyField('self', related_name='friends_friends')
 	user_likes = models.ManyToManyField('self', related_name='liked_by')
 	objects = UserManager()
+
+
+# class Like(models.Model):
+# 	this_user_likes = models.ForeignKey(User, related_name="liked_by")
+# 	liked_by_user= models.ForeignKey(User, related_name="likes")
