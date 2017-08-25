@@ -25,7 +25,6 @@
 }
 
 #content{
-	/*background-color: white;*/
 	background-color: #ddd;
 	width:75%;
 	padding:3%;
@@ -61,7 +60,6 @@
 	opacity:0.65;
 	border-radius: 20px;
 	background-color: white;
-	/*border:2px solid black;*/
 	padding:5px;
 	margin-bottom: 20px;
 
@@ -139,4 +137,14 @@ td {
 
 .start {
 	font-style: italic;
+}
+
+.profileLink {
+	text-decoration: none;
+	text-align: center;
+}
+
+.profilePicc {
+	width: 80px;
+	height: 80px;
 }
